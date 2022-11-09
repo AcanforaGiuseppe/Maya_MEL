@@ -1,0 +1,26 @@
+proc duplicateScatterSelection(int $nrDuplicates, float $spacing)
+{
+    string $selection[] = `ls -sl`;
+    
+    if(size($selection) != 1)
+    {
+        warning"Select a single item";
+    }
+    for ($i = 0; $i < $nrDuplicates; $i += 1)
+    {
+        string $duplicate[] = `duplicate $selection`;
+    
+        float $newYaw = `rand -180 180`;
+        rotate -r -ws -fo 0 ($newYaw) 0 $duplicate;
+        
+        float $newScaleY = `rand 0.5 10`;
+        scale -r 1 ($newScaleY) 1 $duplicate;
+        
+        vector $newPos = `rand <<-$spacing, -$spacing, -$spacing>> <<$spacing, $spacing, $spacing>>`;
+        move -r ($newPos.x) ($newScaleY * 0.5) ($newPos.z) $duplicate;
+        
+        select -r $selection;
+    } 
+}
+
+duplicateScatterSelection(50, 15);

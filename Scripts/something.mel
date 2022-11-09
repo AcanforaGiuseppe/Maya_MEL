@@ -1,0 +1,97 @@
+// Per far eseguire solo una parte di codice:
+// CTRL + INVIO
+
+int $myInt = 1;
+float $myFloat = 1.0;
+
+string $myStr = "cane";
+
+int $myInr +=10;
+
+print ($myStr + "Ciao\n");
+
+vector $myVec = <<1, 2, 3>>;
+
+string $myStr[] = {"ciao", "cane", "gatto"}
+
+// alt+96 for this sign `
+string $sphere[] = `polySphere`;
+move -r 10 0 0 $sphere[0];
+// Lists only selected items
+ls -sl;
+
+
+string $selection[] = `ls -sl`;
+for ($i = 0; $i < size($selection); $i+=1)
+{
+    print ($selectiom[$i] + "\n");
+}
+
+for ($item in $selection)
+{
+    print ($item + "\n");
+}
+if (`size($selection)` == 0)
+{
+    print "Select at least an object.\n";
+}
+
+//else if()
+
+
+// Metodi
+source "Z:\\Sviluppo & Scuola\\- Progetti\\Maya-MEL\\test_mel.mel"
+myFunc;
+
+// Controlla il tipo di un oggetto
+nodeType pSphere1;
+
+// Create interfaces for scripts
+global string $aivWinName = "aivWinName";
+string $aivCB1 = ($aivWinName + "CB1");
+string $aivCB2 = ($aivWinName + "CB2");
+string $aivCB3 = ($aivWinName + "CB3");
+string $aivTF1 = ($aivWinName + "TF1");
+global string $aivRadius= "aivWinNameRadius";
+if(`window -q -ex $aivWinName`)
+{
+    deleteUI $aivWinName;
+}
+window -t "MYTYTLE" $aivWinName;
+    columnLayout -adj 1;
+        rowLayout -nc 2;
+    // Tutto quello creato tra "layout" e setParent"
+    // E' per l'appunto definito quì in mezzo
+            button -l "Create small Sphere" -c "polySphere -r 1";
+            button -l "Create big Sphere" -c "polySphere -r 10";
+        setParent ..;
+        checkBox -v 1 -l "One" $aivCB1;
+        checkBox -l "Two" $aivCB2;
+        checkBox -l "Three" $aivCB3;
+        textField $aivTF1;
+        intSliderGrp -label "Radius" $aivRadius;
+        button -l "Create Sphere" -c "createSphereCommand"
+        button;
+        button -l "Push ME!";
+    setParent ..;
+showWindow $aivWinName;
+window -e -h 100 -w 200 -s 1 $aivWinName;
+checkBox -q -v $aivCB1;
+textField -q -tx $aivTF1;
+
+proc createSphereCommand()
+{
+    global string $aivRadius;
+    int $radius = `intSliderGrp -q -v $aivRadius`;
+    polySphere -r $radius;
+}
+
+// Passaggio di argomenti in metodi
+proc myProc(string $user, int $value)
+{
+    for ($i = 0, $i < $value, $i += 1)
+        print("Hello " + $user + "!\n");
+}
+
+myProc "cane" 5;
+myProc ("cane", 10);

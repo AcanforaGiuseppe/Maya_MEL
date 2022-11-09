@@ -1,0 +1,17 @@
+proc JoinUser(string $user)
+{
+    print("Hello ") + $user + "!\n");
+}
+
+string $windowScript = "windowScript";
+string $textfield = "textfield";
+if(`window -q -ex $windowScript`)
+{
+    deleteUI $windowScript;
+}
+window -t "Script 4 Window" -width 10 - height 10 $windowScript;
+    columnLayout -adj 1;
+        textfield -pht "Insert name here!" $textfield;
+        button -l "Press Me!" -c "JoinUser `textField -q -tx $textfield`;
+    setParent ..;
+showWindow $windowScript;

@@ -1,0 +1,45 @@
+polySphere;
+// pSphere2 polySphere2
+move -r 0 0 4.532849 ;
+polySphere;
+// pSphere3 polySphere3
+move -r 0 0 -0.980248 ;
+move -r 0 0 -2.11228 ;
+polySphere;
+// pSphere4 polySphere4
+polySphere;
+// pSphere5 polySphere5
+polySphere;
+// pSphere6 polySphere6
+polySphere;
+// pSphere7 polySphere7
+polySphere;
+// pSphere8 polySphere8
+polySphere;
+aa;
+// Error: line 2: Cannot find procedure "aa".
+polySphere;
+aa;
+// Error: line 2: Cannot find procedure "aa".
+polySphere;
+aa;
+// Error: line 2: Cannot find procedure "aa".
+polySphere;
+// pSphere12 polySphere12
+move -r 0 0 2.90333 ;
+select -r pSphere6 pSphere7 pSphere8 pSphere9 pSphere10 pSphere11 pSphere12 ;
+select -r pSphere5 ;
+select -r pSphere4 ;
+select -r pSphere3 ;
+select -cl  ;
+polySphere;
+print "WOW";
+WOWpolySphere;
+print "WOW";
+WOWpolySphere;
+print "WOW";
+print "cucù";
+WOWcucùpolySphere;
+print "WOW";
+print "cucù";
+WOWcucù

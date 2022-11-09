@@ -1,0 +1,25 @@
+string $selection[] = `ls -sl`;
+int $numJointsSelected = 0;
+int $numMeshesSelected = 0;
+int $numTransformsSelected = 0;
+
+for($item in $selection)
+{
+    string $node = `nodeType $item`;
+    if($node == "joint")
+    {
+        numJointsSelected += 1;
+    }
+    if($node == "mesh")
+    {
+        numMeshesSelected += 1;
+    }
+    if($node == "transform")
+    {
+        numTransformsSelected += 1;
+    }
+}
+
+print("You have ") + $numJointsSelected + "joints selected, " +
+$numMeshesSelected + " meshes selected, and " +
+$numTransformsSelected + " transform selected.";

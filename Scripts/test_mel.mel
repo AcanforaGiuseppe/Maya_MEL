@@ -1,0 +1,4 @@
+global proc myFunc()
+{
+    print "Cane\n";
+}

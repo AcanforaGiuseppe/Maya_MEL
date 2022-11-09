@@ -1,0 +1,82 @@
+proc randomizeTranslate(float $translateRange, float $scaleAxisX, float $scaleAxisY, float $scaleAxisZ)
+{
+    string $selection[] = `ls -sl`;
+    if(size($selection) <= 0)
+    {
+        error ("Select at least one item");
+    }
+
+    for ($i = 0; $i < size($selection); $i+=1)
+    {
+        vector $newPos = `rand <<-$translateRange, -$translateRange, -$translateRange>> <<$translateRange, $translateRange, $translateRange>>`;
+        move -r ($newPos.x * $scaleAxisX) ($newPos.y * $scaleAxisY) ($newPos.z * $scaleAxisZ) $selection[$i];
+    }   
+}
+
+proc randomizeRotate(float $rotateRange,  float $scaleAxisX, float $scaleAxisY, float $scaleAxisZ)
+{
+    string $selection[] = `ls -sl`;
+    if(size($selection) <= 0)
+    {
+        error ("Select at least one item");
+    }
+
+    for ($i = 0; $i < size($selection); $i+=1)
+    {
+        vector $newRotation = `rand <<-$rotateRange, -$rotateRange, -$rotateRange>> <<$rotateRange, $rotateRange, $rotateRange>>`;
+        rotate -r -ws -fo ($newRotation.x * $scaleAxisX) ($newRotation.y * $scaleAxisY) ($newRotation.z * $scaleAxisZ) $selection[$i]; 
+    }   
+}
+
+proc randomizeScale(float $scaleRange, float $scaleAxisX, float $scaleAxisY, float $scaleAxisZ)
+{
+    string $selection[] = `ls -sl`;
+    if(size($selection) <= 0)
+    {
+        error ("Select at least one item");
+    }
+    
+    for ($i = 0; $i < size($selection); $i+=1)
+    {
+        vector $newScale = `rand <<-$scaleRange, -$scaleRange, -$scaleRange>> <<$scaleRange, $scaleRange, $scaleRange>>`;
+        vector $actualScale = `xform -q -s -r $selection[$i]`;
+        scale -a ($actualScale.x + $newScale.x * $scaleAxisX) ($actualScale.y + $newScale.y * $scaleAxisY) ($actualScale.z + $newScale.z * $scaleAxisZ) $selection[$i];
+    }
+}
+
+proc randomizer()
+{
+    string $winRandomizer = "Randomizer";
+    global string $translationSliderGroup = "translationSliderGroupName";
+    global string $translationFloatGroup = "translationFloatGroupName";
+    global string $rotationSliderGroup = "rotationSliderGroupName";
+    global string $rotationFloatGroup = "rotationFloatGroupName";
+    global string $scaleSliderGroup = "scaleSliderGroupName";
+    global string $scaleFloatGroup = "scaleFloatGroupName";
+    if (`window -q -ex $winRandomizer`)
+    {
+        deleteUI $winRandomizer;
+    }
+    window -t "Randomizer" $winRandomizer;
+        columnLayout -adj 1;
+        
+            floatSliderGrp -label "Translate Range" -field true
+                -minValue 0 -maxValue 30.0 -v 0 -dc "randomizeTranslate(`floatSliderGrp -q -v $translationSliderGroup`, `floatFieldGrp -q -v1 $translationFloatGroup`,`floatFieldGrp -q -v2 $translationFloatGroup`,`floatFieldGrp -q -v3 $translationFloatGroup`)" -ss 0.001 $translationSliderGroup;
+            floatFieldGrp -numberOfFields 3
+                -label "Scale Axis" -v1 1 -v2 1 -v3 1 $translationFloatGroup;
+                
+            floatSliderGrp -label "Rotate Range" -field true
+                -minValue 0 -maxValue 360.0 -v 0 -dc "randomizeRotate(`floatSliderGrp -q -v $rotationSliderGroup`, `floatFieldGrp -q -v1 $rotationFloatGroup`,`floatFieldGrp -q -v2 $rotationFloatGroup`,`floatFieldGrp -q -v3 $rotationFloatGroup`)" -ss 0.001 $rotationSliderGroup;
+            floatFieldGrp -numberOfFields 3
+                -label "Scale Axis" -v1 1 -v2 1 -v3 1 $rotationFloatGroup;
+            
+            floatSliderGrp -label "Scale Range" -field true
+                -minValue 0 -maxValue 5.0 -v 0 -dc "randomizeScale(`floatSliderGrp -q -v $scaleSliderGroup`, `floatFieldGrp -q -v1 $scaleFloatGroup`,`floatFieldGrp -q -v2 $scaleFloatGroup`,`floatFieldGrp -q -v3 $scaleFloatGroup`)" -ss 0.001 $scaleSliderGroup;
+            floatFieldGrp -numberOfFields 3
+                -label "Scale Axis" -v1 0 -v2 0 -v3 0 $scaleFloatGroup;
+             
+        setParent ..;
+    showWindow $winRandomizer;
+}
+
+randomizer()

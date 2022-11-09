@@ -1,0 +1,18 @@
+string $selection[] = `ls -sl`;
+
+if(`size $selection` == 2)
+{
+    vector $pos = `xform -q -a -t $selection[0]`;
+    move -a ($pos.x) ($pos.y) ($pos.z) $selection[1];
+}
+else if(`size($selection)` == 3)
+{
+    vector $posA = `xform -q -a -t $selection[0]`;
+    vector $posB = `xform -q -a -t $selection[1]`;
+    vector $middlePos = (($posA - $posB) / 2 + $posB);
+    move -a ($middlePos.x) ($middlePos.y) ($middlePos.z) $selection[2];
+}
+else
+{
+    error "Select 2 or 3 objects";
+}

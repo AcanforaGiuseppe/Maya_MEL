@@ -1,0 +1,42 @@
+global proc mirrorObject(int $merge)
+{
+    string $selection[] = `ls -sl`;
+    if(`size($selection)` != 1)
+    {
+        error "Select a single object";
+    }
+    float $minX = `getAttr ($selection[0] + ".boundingBoxMinX")`;
+    move -r (-$minX) 0 0 $selection;
+    //float $maxX - `getAttr ($selection[0] + "boundingBoxMaxX")`;
+    string $duplicate[] = `duplicate $selection`;
+    string $tempGroup = `group -em`;
+
+    parent $duplicate $tempGroup;
+    scale -a -1 1 1 $tempGroup;
+    ungroup $tempGroup;
+
+    if($merge)
+    {
+        string $newPoly[] = `polyUnite -ch 1 -mergeUVSets 1 -centerPivot $selection[0] $duplicate[0]`;
+        move -r ($minX) 0 0 $newPoly;
+    }
+    else
+    {
+        move -r ($minX) 0 0 $selection[0] $duplicate[0];
+    }
+}
+
+
+string $windowName = "MergeToolUI";
+
+if(window -q -ex $windowName)
+{
+    deleteUI $windowName;
+}
+
+window $windowName;
+columnLayout -adjustableColumn true;
+    string $mergeCB = `checkBox -label "Merge" -v true`;
+    button -label "Mirror" -c "mirrorObject `checkBox -q -v $mergeCB`";
+setParent ..;
+showWindow $windowName;
